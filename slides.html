@@ -7460,42 +7460,13 @@ June 20, 2024<br/>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Abstract">Abstract<a class="anchor-link" href="#Abstract">¶</a></h2><p>Lots of great third-party platforms are available which allow users to create interactive webmaps to present spatial data including ArcGIS Online, Google Maps, and Mapbox.  These services are appropriate for many use cases, however some situations may warrant a standalone webmap that is not reliant on a third party platform.  Such situations might include budget constraints, special access control requirements, special user interface requirements, the desire to package the content or implement version control, or the need to access the webmap in an environment without internet access.  In such cases, it is possible to develop a standalone webmap from scratch using frameworks such as Leaflet or OpenLayers, however this can be time consuming and it requires knowledge of Javascript programming and web server administration. Luckily, the excellent GeoPandas package for Python provides a means of producing basic webmaps that is more accessible to Python programmers and avoids much of the complexity and tedium of building the webmap from scratch. This presentation demonstrates how to automatically produce an interactive standalone webmap from U.S. Census data using GeoPandas. The workflow is implemented using Jupyter to allow for convenient  prototyping the webmap prior to production.  The presentation also covers how to make the webmap accessible to the public using GitHub Pages.</p>
-<p>Attendee familiarity with Python, Jupyter, and GitHub is helpful but not required.</p>
-</div>
-</div>
-</div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Agenda">Agenda<a class="anchor-link" href="#Agenda">¶</a></h2><ol>
 <li>Motivation</li>
 <li>Process overview and prerequisites</li>
-<li>Data preparation <em>(skipped, but included in documents)</em></li>
-<li>Demo of webmap creation  and export</li>
+<li>Data preparation <em>(skipped in presentation, but included in notebook)</em></li>
+<li>Demo of webmap creation and export</li>
 <li>Demo of webmap publishing using GitHub Pages</li>
 </ol>
-</div>
-</div>
-</div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="How-to-access-the-content-from-this-presentation">How to access the content from this presentation<a class="anchor-link" href="#How-to-access-the-content-from-this-presentation">¶</a></h2><p>All of the content presented today is publicly available in GitHub:</p>
-<p><a href="https://github.com/aporr/easy-webmaps-with-jupyter">https://github.com/aporr/easy-webmaps-with-jupyter</a></p>
-<p>The slides are available directly from the following URL:</p>
-<p><a href="https://aporr.github.io/easy-webmaps-with-jupyter/slides.html">https://aporr.github.io/easy-webmaps-with-jupyter/slides.html</a></p>
-<p>The slides are implemented using Reveal.js, which <a href="https://revealjs.com/vertical-slides/">arranges slides in a 2D layout</a>.  Press <code>PGDN</code> to move to the next slide or <code>PGUP</code> to move to previous slide, or press <code>ESC</code> to see an overview and move through the slides non-linearly.</p>
-<p>The webmap is available directly from the following URL:</p>
-<p><a href="https://aporr.github.io/easy-webmaps-with-jupyter/webmap.html">https://aporr.github.io/easy-webmaps-with-jupyter/webmap.html</a></p>
 </div>
 </div>
 </div>
@@ -7510,6 +7481,22 @@ June 20, 2024<br/>
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The screenshot above shows the webmap that is produced by this notebook.  It includes two layers:</p>
+<ol>
+<li>Percent of workers living in households with no vehicle access by census tract</li>
+<li>Central Ohio bicycle infrastructure facilities by completion status</li>
+</ol>
+<p>The completed webmap consists of a single HTML file that includes all of the required Javascript code (automatically generated) as well as all of the data that is displayed on the map.  It includes typical user interface features such as pan/zoom, tooltips, and pop-ups.</p>
+</div>
+</div>
+</div>
 </div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7518,13 +7505,13 @@ June 20, 2024<br/>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Why-would-I-want-a-standalone-webmap?">Why would I want a standalone webmap?<a class="anchor-link" href="#Why-would-I-want-a-standalone-webmap?">¶</a></h2><ol>
-<li>You <strong>can't afford to use a commercial service</strong>.</li>
-<li>You need to <strong>share a sensitive map</strong> with parties who cannot access a commercial service.</li>
+<li>You <strong>can't afford to use a commercial service</strong> (such as ArcGIS Online).</li>
+<li>You need to <strong>share a restricted-access map</strong> with parties who cannot access a commercial service.</li>
 <li>You want to <strong>hand over the completed map</strong> so you aren't obligated to host it indefinitely.</li>
-<li>You want the map to include <strong>fancy features</strong> that the commercial services don't support.</li>
+<li>You want the map to include <strong>niche features</strong> that the commercial services don't support.</li>
 <li>You want to <strong>automate production</strong> of the map.</li>
-<li>You want to use <strong>revision control</strong> (e.g. git).</li>
-<li>You want to <strong>embed the map in a custom app</strong> more seamlessly</li>
+<li>You want to <strong>revision control</strong> the map (e.g. git).</li>
+<li>You want to <strong>embed the map in a custom web app</strong> more seamlessly</li>
 </ol>
 </div>
 </div>
@@ -7559,7 +7546,7 @@ June 20, 2024<br/>
 <li>Jupyter (optional, but helpful for prototyping)</li>
 <li>GitHub acccount (optional, if you wish to publish using GitHub)</li>
 <li>Webserver (optional, if you wish to publish without GitHub)</li>
-<li>Enough Python and GitHub knowledge to adapt this notebook for your purposes</li>
+<li>Basic familiarity with Python and GitHub</li>
 </ul>
 </div>
 </div>
@@ -7571,7 +7558,13 @@ June 20, 2024<br/>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Demo-of-webmap-creation-and-export">Demo of webmap creation and export<a class="anchor-link" href="#Demo-of-webmap-creation-and-export">¶</a></h1><p>There are no slides to accompany this section since it was presented as a live demonstration. For implementation details, refer to the Jupyter notebook.</p>
+<h1 id="Demo-of-webmap-creation-and-export">Demo of webmap creation and export<a class="anchor-link" href="#Demo-of-webmap-creation-and-export">¶</a></h1><p>There are no slides to accompany this section since it was presented as a live demonstration. See the documented code in the Jupyter notebook.  This section includes the following subsections:</p>
+<ul>
+<li>Environment setup</li>
+<li>Data preparation</li>
+<li>Webmap prototyping</li>
+<li>Webmap export</li>
+</ul>
 </div>
 </div>
 </div>
